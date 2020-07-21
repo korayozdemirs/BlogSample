@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
 using BlogSample.BLL.Abstract;
+using BlogSample.DTO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogSample.WebUI.Controllers
@@ -22,6 +20,23 @@ namespace BlogSample.WebUI.Controllers
         public IActionResult CategoryList()
         {
             return View(categoryService.getAll());
+        }
+
+        public IActionResult CategoryAdd()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult CategoryAdd(CategoryDTO categoryDTO)
+        {
+            categoryService.newCategory(categoryDTO);
+            return RedirectToAction("CategoryList");
+        }
+
+        public IActionResult CategoryDelete(int id)
+        {
+            categoryService.deleteCategory(id);
+            return RedirectToAction("CategoryList");
         }
     }
 }

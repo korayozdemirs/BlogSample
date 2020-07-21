@@ -2,6 +2,7 @@ using BlogSample.BLL.Abstract;
 using BlogSample.BLL.BlogService;
 using BlogSample.Core.Data.UnitOfWork;
 using BlogSample.DAL;
+using BlogSample.Mapping.ConfigProfile;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ namespace BlogSample.WebUI
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            MapperConfig.RegisterMappers();
         }
 
         public IConfiguration Configuration { get; }
@@ -33,7 +35,7 @@ namespace BlogSample.WebUI
 
             services.AddSingleton<DbContext>(new BlogDbContext(optionsBuilder.Options));
 
-            using (var context =new BlogDbContext(optionsBuilder.Options))
+            using (var context = new BlogDbContext(optionsBuilder.Options))
             {
                 context.Database.EnsureCreated();
                 context.Database.Migrate();
