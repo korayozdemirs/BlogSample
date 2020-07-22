@@ -43,6 +43,8 @@ namespace BlogSample.WebUI
 
             services.AddSingleton<IUnitofWork, UnitofWork>();
             services.AddSingleton<ICategoryService, CategoryService>();
+            services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IRoleService, RoleService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,6 +66,30 @@ namespace BlogSample.WebUI
 
             app.UseEndpoints(endpoints =>
             {
+
+
+                endpoints.MapControllerRoute(
+                     name: "RoleList",
+                     pattern: "Admin/Roles",
+                     defaults: new { controller = "Admin", action = "RoleList" });
+
+
+                endpoints.MapControllerRoute(
+                      name: "RoleAdd",
+                      pattern: "Admin/RoleAdd",
+                      defaults: new { controller = "Admin", action = "RoleAdd" });
+
+                endpoints.MapControllerRoute(
+                      name: "UserList",
+                      pattern: "Admin/Users",
+                      defaults: new { controller = "Admin", action = "UserList" });
+
+
+                endpoints.MapControllerRoute(
+                      name: "UserAdd",
+                      pattern: "Admin/UserAdd",
+                      defaults: new { controller = "Admin", action = "UserAdd" });
+
                 endpoints.MapControllerRoute(
                          name: "CategoryList",
                           pattern: "Admin/Categories",
