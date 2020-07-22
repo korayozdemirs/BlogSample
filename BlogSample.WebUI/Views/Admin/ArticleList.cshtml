@@ -1,0 +1,65 @@
+﻿@model ArticleViewModel
+
+@{
+    ViewData["Title"] = "ArticleList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section pageHeader{
+    <div class="note note-info">
+        <p> Sistemde Kayıtlı Makaleler </p>
+    </div>
+}
+
+
+<div class="portlet box blue">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="fa fa-cogs"></i>Sistemde Kayıtlı Makaleler
+        </div>
+        <div class="tools">
+            <a href="javascript:;" class="collapse"> </a>
+            <a href="#portlet-config" data-toggle="modal" class="config"> </a>
+            <a href="javascript:;" class="reload"> </a>
+            <a href="javascript:;" class="remove"> </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th> Kategori </th>
+                        <th> Title</th>
+                        <th>Content</th>
+                        <th>Picture</th>
+
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (ArticleDTO article in Model.ArticleDTOs)
+                    {
+
+                        <tr>
+                            <td> @Model.CategoryDTOs.FirstOrDefault(z => z.Id == article.CategoryId).Name </td>
+                            <td> @article.Title </td>
+                            <td> @article.Content.Substring(0, 30) ... </td>
+                            <td> <img style="height:50px; width:auto;" src="@article.Picture" /></td>
+
+                            <td style="text-align:center;">
+                                <a class="btn btn-success btn-sm" asp-action="ArticleEdit" asp-route-id="@article.Id">Edit</a>
+                                <a class="btn btn-danger btn-sm" asp-action="ArticleDelete" asp-route-id="@article.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+</div>
+

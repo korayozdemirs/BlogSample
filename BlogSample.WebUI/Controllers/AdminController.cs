@@ -1,6 +1,7 @@
 ﻿
 using BlogSample.BLL.Abstract;
 using BlogSample.DTO;
+using BlogSample.WebUI.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogSample.WebUI.Controllers
@@ -10,17 +11,38 @@ namespace BlogSample.WebUI.Controllers
         private readonly ICategoryService categoryService;
         private readonly IUserService userService;
         private readonly IRoleService roleService;
-        public AdminController(ICategoryService _categoryService, 
-            IUserService _userService, IRoleService _roleService)
+        private readonly IArticleService articleService;
+        public AdminController(ICategoryService _categoryService,
+            IUserService _userService, IRoleService _roleService, IArticleService _articleService)
         {
             categoryService = _categoryService;
             userService = _userService;
             roleService = _roleService;
+            articleService = _articleService;
         }
         public IActionResult Index()
         {
             return View();
         }
+
+        #region Article
+        public IActionResult ArticleList()
+        {
+            ArticleViewModel model = new ArticleViewModel();
+            model.ArticleDTOs = articleService.getAll();
+            model.CategoryDTOs = categoryService.getAll();
+            return View(model);
+        }
+
+        public IActionResult ArticleAdd()
+        {
+            ArticleViewModel viewModel = new ArticleViewModel();
+            viewModel.CategoryDTOs = categoryService.getAll();
+            return View(viewModel);
+        }
+
+
+        #endregion
 
         #region Role
         public IActionResult RoleList()

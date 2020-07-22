@@ -44,6 +44,7 @@ namespace BlogSample.WebUI
             services.AddSingleton<IUnitofWork, UnitofWork>();
             services.AddSingleton<ICategoryService, CategoryService>();
             services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IArticleService, ArticleService>();
             services.AddSingleton<IRoleService, RoleService>();
         }
 
