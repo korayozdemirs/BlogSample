@@ -32,7 +32,7 @@ namespace BlogSample.WebUI.Controllers
             var user = userService.FindwithUsernameandMail(userModel.UserName, userModel.Password);
             if (user != null)
             {
-                user.roleDTO = roleService.getRole(user.Id);
+                user.roleDTO = roleService.getRole((int)user.RoleId);
                 var userClaims = new List<Claim>()
                 {
                        new Claim("UserDTO",BloggerConvert.BloggerJsonSerialize(user))

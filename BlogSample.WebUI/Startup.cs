@@ -4,6 +4,7 @@ using BlogSample.Core.Data.UnitOfWork;
 using BlogSample.DAL;
 using BlogSample.Mapping.ConfigProfile;
 using BlogSample.WebUI.CustomHandler;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -58,6 +59,9 @@ namespace BlogSample.WebUI
                     policyBuilder.UserRequireCustomClaim(ClaimTypes.Email);
                 });
             });
+
+            services.AddScoped<IAuthorizationHandler, PoliciesAuthorizationHandler>();
+            services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
 
             services.AddSingleton<IUnitofWork, UnitofWork>();
             services.AddSingleton<ICategoryService, CategoryService>();
