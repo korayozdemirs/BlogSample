@@ -2,11 +2,13 @@
 using BlogSample.BLL.Abstract;
 using BlogSample.DTO;
 using BlogSample.WebUI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 
 namespace BlogSample.WebUI.Controllers
 {
+    [Authorize(Roles = "Admin,Yonetici")]
     public class AdminController : BaseController
     {
         private readonly ICategoryService categoryService;
