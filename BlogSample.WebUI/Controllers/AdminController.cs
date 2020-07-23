@@ -3,10 +3,11 @@ using BlogSample.BLL.Abstract;
 using BlogSample.DTO;
 using BlogSample.WebUI.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
 
 namespace BlogSample.WebUI.Controllers
 {
-    public class AdminController : Controller
+    public class AdminController : BaseController
     {
         private readonly ICategoryService categoryService;
         private readonly IUserService userService;
@@ -39,6 +40,20 @@ namespace BlogSample.WebUI.Controllers
             ArticleViewModel viewModel = new ArticleViewModel();
             viewModel.CategoryDTOs = categoryService.getAll();
             return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult ArticleAdd(ArticleViewModel viewModel)
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images");
+            var fileStream = new FileStream(Path.Combine(path, viewModel.File.FileName), FileMode.Create);
+            viewModel.File.CopyTo(fileStream);
+
+            viewModel.ArticleDTO.UserDTO = CurrentUser;
+            viewModel.ArticleDTO.Picture = "/images/" + viewModel.File.FileName;
+            ArticleDTO dto = viewModel.ArticleDTO;
+            articleService.newArticle(dto);
+            return RedirectToAction("ArticleList");
         }
 
 

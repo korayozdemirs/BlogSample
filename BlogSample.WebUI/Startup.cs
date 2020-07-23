@@ -3,12 +3,14 @@ using BlogSample.BLL.BlogService;
 using BlogSample.Core.Data.UnitOfWork;
 using BlogSample.DAL;
 using BlogSample.Mapping.ConfigProfile;
+using BlogSample.WebUI.CustomHandler;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Security.Claims;
 
 namespace BlogSample.WebUI
 {
@@ -41,6 +43,22 @@ namespace BlogSample.WebUI
                 context.Database.Migrate();
             }
 
+            services.AddAuthentication("CookieAuthentication")
+                 .AddCookie("CookieAuthentication", config =>
+                 {
+                     config.Cookie.Name = "UserLoginCookie";
+                     config.LoginPath = "/Login";
+                     config.AccessDeniedPath = "/AccessDenied";
+                 });
+
+            services.AddAuthorization(config =>
+            {
+                config.AddPolicy("UserPolicy", policyBuilder =>
+                {
+                    policyBuilder.UserRequireCustomClaim(ClaimTypes.Email);
+                });
+            });
+
             services.AddSingleton<IUnitofWork, UnitofWork>();
             services.AddSingleton<ICategoryService, CategoryService>();
             services.AddSingleton<IUserService, UserService>();
@@ -67,6 +85,28 @@ namespace BlogSample.WebUI
 
             app.UseEndpoints(endpoints =>
             {
+
+
+                endpoints.MapControllerRoute(
+                   name: "Register",
+                   pattern: "Register",
+                   defaults: new { controller = "Login", action = "Register" });
+
+                endpoints.MapControllerRoute(
+                    name: "Login",
+                    pattern: "Login",
+                    defaults: new { controller = "Login", action = "UserLogin" });
+
+                endpoints.MapControllerRoute(
+                     name: "AccessDenied",
+                     pattern: "AccessDenied",
+                     defaults: new { controller = "Login", action = "AccessDenied" });
+
+                endpoints.MapControllerRoute(
+                     name: "Logout",
+                     pattern: "Logout",
+                     defaults: new { controller = "Login", action = "Logout" });
+
 
 
                 endpoints.MapControllerRoute(
